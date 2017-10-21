@@ -10,48 +10,25 @@
 library(shiny)
 library(plotly)
 library(tidyquant)
-library(dplyr)
+library(ggplot2)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  
-  options(shiny.sanitize.errors = FALSE)
-  
-  # renderPlotly() also understands ggplot2 objects!
-  output$plot <- renderPlotly({
+
+  output$plot <- renderPlot({
     
     # parse list of stocks from input
     stocks <- trimws(unlist(strsplit(input$stocks,",")))
 
-    # determine what metric to use perform calculations
-    #if(input$metric == 0) {
-    #  df <- stocks %>%
-    #    tq_get(get = "stock.prices") %>%
-    #    group_by(symbol) %>%
-    #    tq_transmute(adjusted, quarterlyReturn)
-    #  plot_ly(data = df, x = ~date, y = ~quarterly.returns, color = ~symbol)
-    #} else {
-    #  df <- stocks %>%
-    #    tq_get(get = "stock.prices") %>%
-    #    group_by(symbol) %>%
-    #    tq_transmute(adjusted, annualReturn)
-    #  plot_ly(data = df, x = ~date, y = ~yearly.returns, color = ~symbol)
-    #}
-
-    
     # Get returns for individual stock components grouped by symbol
     df <- c(stocks,"SPY") %>%
       tq_get(get = "stock.prices") %>%
       group_by(symbol) %>%
       mutate(total.return = adjusted/adjusted[1]*100)
 
-    # generate the interactive plot
-    plot_ly(data = df, x = ~date, y = ~total.return, color = ~symbol, mode = 'lines') %>%
-      layout(
-        title = "Total Return",
-        xaxis = list(title = "Date"),
-        yaxis = list(title = "Percent Total Return")
-      )
+    # generate the plot
+    ggplot(df, aes(x=date,y=total.return,color=symbol)) +
+      geom_line()
   })
 
 })

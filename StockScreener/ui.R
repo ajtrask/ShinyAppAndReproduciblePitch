@@ -25,7 +25,7 @@ shinyUI(fluidPage(
     # Show a plot of the generated distribution
     mainPanel(
       'The plot updates with the total return from the beginning of the available data for each symbol.  Stock price data is retrieved from Yahoo Finance using the tidyquant package and the total return is calculated.',
-      plotlyOutput("plot"),
+      plotOutput("plot"),
       'The symbol "SPY" closely tracks the S&P 500 for an indication of general market performance.'
       )
     )

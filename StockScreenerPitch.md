@@ -4,17 +4,17 @@ author: Aaron Trask
 date: 10/21/2017
 autosize: true
 
-Stock Screener
+Features
 ========================================================
 
-- **Interactive:** zoom and pan to explore detail
-- **Customizable:** choose stocks to explore and compare
-- **Informative:** visualize returns and compare
+- **Visual:** stock performance at a glance
+- **Customizable:** choose your stocks
+- **Informative:** compare between stocks
 
 Tidyverse
 ========================================================
 
-Leverages the tidyquant package to retrieve up to date stock data from Yahoo Finance.
+Leverages the ***tidyquant*** package to retrieve up to date stock data from Yahoo Finance.
 
 ```r
 library(tidyquant)
@@ -38,14 +38,21 @@ head(df)
 # ... with 1 more variables: total.return <dbl>
 ```
 
-Plotly
+ggplot2
 ========================================================
 
-Interactive exploration through Plotly.
+Visualization using the ***ggplot2*** package for exploration.
 
 
-<iframe src="demo.html" style="position:absolute;height:100%;width:100%"></iframe>
+```r
+library(ggplot2)
+ggplot(df, aes(x=date,y=total.return,color=symbol)) +
+  geom_line()
+```
+
+<img src="StockScreenerPitch-figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" style="display: block; margin: auto;" />
+
 
 Accessing the Application
 ========================================================
-To access the Shiny application, please visit <https://support.rstudio.com/hc/en-us/articles/200486468>
+To access the Shiny application, please visit <https://ajtrask.shinyapps.io/StockScreener/>
