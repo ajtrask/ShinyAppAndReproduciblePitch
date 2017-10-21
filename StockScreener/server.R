@@ -15,6 +15,8 @@ library(dplyr)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
+  options(shiny.sanitize.errors = FALSE)
+  
   # renderPlotly() also understands ggplot2 objects!
   output$plot <- renderPlotly({
     
@@ -41,30 +43,15 @@ shinyServer(function(input, output) {
     df <- c(stocks,"SPY") %>%
       tq_get(get = "stock.prices") %>%
       group_by(symbol) %>%
-      mutate(total.return = adjusted/adjusted[date == '2007-01-03'])
+      mutate(total.return = adjusted/adjusted[1]*100)
 
     # generate the interactive plot
-    plot_ly(data = df, x = ~date, y = ~total.return, color = ~symbol)
-    
-    #  add_lines(y = ~Ra, name = ~symbol) %>%
-    #  add_lines(y = ~Rb, name = "S&P 500")
-    #  layout(
-    #    title = "Closing Stock Price",
-    #    xaxis = list(domain = c(0.1, 1)),
-    #    yaxis = list(title = "Price ($)"),
-    #    updatemenus = list(
-    #      list(
-    #        y = 0.7,
-    #        buttons = list(
-    #          list(method = "restyle",
-    #               args = list("visible", list(TRUE, FALSE)),
-    #               label = "AAPL"),
-    #          
-    #          list(method = "restyle",
-    #               args = list("visible", list(FALSE, TRUE)),
-    #               label = "GOOG")))
-    #    )
-    #  )
+    plot_ly(data = df, x = ~date, y = ~total.return, color = ~symbol, mode = 'lines') %>%
+      layout(
+        title = "Total Return",
+        xaxis = list(title = "Date"),
+        yaxis = list(title = "Percent Total Return")
+      )
   })
 
 })

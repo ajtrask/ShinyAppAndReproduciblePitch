@@ -18,13 +18,15 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       textInput("stocks","Stocks (comma seperated):","AAPL,GOOG"),
-      'Try adding ", FB" or any other stock symbol'
+      'Add to or replace the list of stock symbols in the the text box above.  Try adding ", FB" for Facebook.  The plot will update with the total return since the beginning of the available data.'
 
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
-      plotlyOutput("plot")
+      'The plot updates with the total return from the beginning of the available data for each symbol.  Stock price data is retrieved from Yahoo Finance using the tidyquant package and the total return is calculated.',
+      plotlyOutput("plot"),
+      'The symbol "SPY" closely tracks the S&P 500 for an indication of general market performance.'
       )
     )
   ))

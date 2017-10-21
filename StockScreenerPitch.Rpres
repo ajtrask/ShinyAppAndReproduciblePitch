@@ -1,0 +1,42 @@
+Stock Screener Application
+========================================================
+author: Aaron Trask
+date: 10/21/2017
+autosize: true
+
+Stock Screener
+========================================================
+
+- **Interactive:** zoom and pan to explore detail
+- **Customizable:** choose stocks to explore and compare
+- **Informative:** visualize returns and compare
+
+Tidyverse
+========================================================
+
+Leverages the tidyquant package to retrieve up to date stock data from Yahoo Finance.
+```{r}
+library(tidyquant)
+# get stock prices
+df <- c('AAPL','GOOG') %>% tq_get(get = "stock.prices") %>%
+      group_by(symbol) %>% mutate(total.return = adjusted/adjusted[1]*100)
+head(df)
+```
+
+Plotly
+========================================================
+
+Interactive exploration through Plotly.
+
+```{r, results='hide', echo=FALSE}
+library(plotly)
+p <- plot_ly(data = df, x = ~date, y = ~total.return, color = ~symbol, mode = 'lines') %>%
+      layout(title = "Total Return",xaxis = list(title = "Date"),
+        yaxis = list(title = "Percent Total Return"))
+htmlwidgets::saveWidget(as.widget(p), file = "demo.html")
+```
+<iframe src="demo.html" style="position:absolute;height:100%;width:100%"></iframe>
+
+Accessing the Application
+========================================================
+To access the Shiny application, please visit <https://support.rstudio.com/hc/en-us/articles/200486468>
